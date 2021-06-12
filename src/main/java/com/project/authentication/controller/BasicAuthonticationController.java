@@ -18,4 +18,9 @@ public class BasicAuthonticationController {
     public ResponseEntity<?> userRegistration(@RequestBody RegistrationRequest registrationRequest){
         return service.registerUser(registrationRequest);
     }
+
+    @PostMapping({"/login"})
+    public ResponseEntity<?> userLogin(@RequestBody AuthenticationRequest authenticationRequest){
+        return service.authenticateUser(authenticationRequest);
+    }
 }
