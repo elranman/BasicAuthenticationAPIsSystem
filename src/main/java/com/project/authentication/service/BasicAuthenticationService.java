@@ -7,6 +7,8 @@ import com.project.authentication.model.*;
 import java.util.*;
 
 import com.project.authentication.utils.BasicAuthenticationUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+
 
 @Service
 public class BasicAuthenticationService {
@@ -116,5 +118,26 @@ public class BasicAuthenticationService {
         response.setStatusCode("200");
         response.setStatusDescription("Authentication of user: " + userName + " passed successfully");
         return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity<?> retreiveUserData(UserDataRequest userDataRequest) {
+
+        String jwt = userDataRequest.getJwt();
+        String userName = "";
+        try {
+            Jws<Claims> result = BasicAuthenticationUtil.jwtVerification(jwt,secret);
+            userName = result.getBody().get("userName").toString();
+            LOGGER.debug(" jwt result value is: " + result);
+            LOGGER.debug(" username value is: " + userName);
+            user = gson.fromJson(inMemoryStorage.get(userName), User.class);
+        }catch(Exception exception){
+            return ResponseEntity.badRequest()
+                    .body("failed to find a matching data for your token key.");
+        }
+        response = new UserDataResponse(user.getFullName());
+        response.setStatusCode("200");
+        response.setStatusDescription("Full Name of user "+ user.getEmailAddress() +" is: " + user.getFullName());
+        return ResponseEntity.ok()
+                .body(response);
     }
 }

@@ -27,4 +27,9 @@ public class BasicAuthenticationUtil {
                 .compact();
     }
 
+    public static Jws<Claims> jwtVerification(String jwt,byte[] secret) {
+        return Jwts.parser()
+                .setSigningKey(Keys.hmacShaKeyFor(secret))
+                .parseClaimsJws(jwt);
+    }
 }

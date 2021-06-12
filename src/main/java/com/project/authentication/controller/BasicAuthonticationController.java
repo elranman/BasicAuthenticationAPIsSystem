@@ -23,4 +23,9 @@ public class BasicAuthonticationController {
     public ResponseEntity<?> userLogin(@RequestBody AuthenticationRequest authenticationRequest){
         return service.authenticateUser(authenticationRequest);
     }
+
+    @PostMapping({"/userdata"})
+    public ResponseEntity<?> userDataInfo(@RequestBody UserDataRequest userDataRequest){
+        return service.retreiveUserData(userDataRequest);
+    }
 }
