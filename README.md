@@ -1,7 +1,5 @@
 # BasicAuthenticationAPIsSystem
 
-Copy to readme file - BaiscSecurityAPIsSystem task:
-
 Author: Elran Manor
 
 Description:
